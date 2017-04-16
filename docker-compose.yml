@@ -1,0 +1,15 @@
+backend:
+  build: ./backend/
+  ports:
+    - 80:3000
+  links:
+    - mongo
+  volumes:
+    - ./backend:/usr/src/app
+
+mongo:
+  image: mongo:3.4
+  expose:
+    - 27017
+  ports:
+    - 27018:27017
