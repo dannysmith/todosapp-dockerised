@@ -8,16 +8,45 @@
 <body>
   <p>TODO: Work through <a href="https://alligator.io/vuejs/rest-api-axios/">this tutorial</a>.</p>
   <div id="app">
-    {{ message }}
+    <h2>Todos</h2>
+    <ul id="todos-list">
+      <li v-for="todo in todos" v-bind:id="todo._id">
+        {{ todo.title }}
+      </li>
+    </ul>
   </div>
+
+  <!-- Load Packages -->
   <script src="https://unpkg.com/vue"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
   <script>
+  var client = axios.create({
+    baseURL: 'http://localhost/',
+    timeout: 1000
+  });
+
   var app = new Vue({
     el: '#app',
     data: {
-      message: 'Hello Vue!'
+      todos: []
+    },
+    methods: {
+      getAllTodos: function(event) {
+        client.get('/todos')
+        .then(function (response) {
+          console.log('Got back ' + response.data.length + ' todos.');
+          this.app.todos = response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
     }
   });
+
+  app.getAllTodos();
+
   </script>
 </body>
 </html>
